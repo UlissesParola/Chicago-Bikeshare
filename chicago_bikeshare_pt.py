@@ -28,8 +28,10 @@ input("Aperte Enter para continuar...")
 # TAREFA 1
 # TODO: Imprima as primeiras 20 linhas usando um loop para identificar os dados.
 print("\n\nTAREFA 1: Imprimindo as primeiras 20 amostras")
-for amostra in data_list[1:21]:
-    print(amostra)
+counter = 1
+for sample in data_list[1:21]:
+    print(str.format("Amostra {}: {}", counter, sample))
+    counter += 1
 
 # Vamos mudar o data_list para remover o cabeçalho dele.
 data_list = data_list[1:]
@@ -41,8 +43,15 @@ input("Aperte Enter para continuar...")
 # TAREFA 2
 # TODO: Imprima o `gênero` das primeiras 20 linhas
 print("\nTAREFA 2: Imprimindo o gênero das primeiras 20 amostras")
-for amostra in data_list[:20]:
-    print(amostra[6])
+counter = 1
+for sample in data_list[:20]:
+    gender = sample[6]
+
+    if gender == "":
+        gender = "Não informado"
+    
+    print(str.format("Gênero da amostra {}: {}", counter, gender))
+    counter += 1 
 
 # Ótimo! Nós podemos pegar as linhas(samples) iterando com um for, e as colunas(features) por índices.
 # Mas ainda é difícil pegar uma coluna em uma lista. Exemplo: Lista com todos os gêneros
@@ -50,11 +59,21 @@ for amostra in data_list[:20]:
 input("Aperte Enter para continuar...")
 # TAREFA 3
 # TODO: Crie uma função para adicionar as colunas(features) de uma lista em outra lista, na mesma ordem
+'''
+
+Cria uma lista com as informações de uma coluna de outra lista.
+Argumentos:
+    param1: Lista com as amostras.
+    param2: índice da coluna
+Retorna:
+    lista com as amostras da coluna escolhida.
+
+'''
 def column_to_list(data, index):
     column_list = []
     # Dica: Você pode usar um for para iterar sobre as amostras, pegar a feature pelo seu índice, e dar append para uma lista
-    for amostra in data:
-        column_list.append(amostra[index])
+    for sample in data:
+        column_list.append(sample[index])
     return column_list
 
 
@@ -75,10 +94,10 @@ input("Aperte Enter para continuar...")
 male = 0
 female = 0
 
-for amostra in data_list:
-    if amostra[6] == "Male":
+for sample in data_list:
+    if sample[6] == "Male":
         male += 1
-    elif amostra[6] == "Female":
+    elif sample[6] == "Female":
         female += 1
 
 # Verificando o resultado
@@ -94,13 +113,22 @@ input("Aperte Enter para continuar...")
 # TAREFA 5
 # TODO: Crie uma função para contar os gêneros. Retorne uma lista.
 # Isso deveria retornar uma lista com [count_male, count_female] (exemplo: [10, 15] significa 10 Masculinos, 15 Femininos)
+'''
+
+Cria uma lista com as quantidades de ocorrências de cada gênero entre as amostras.
+Argumentos:
+    param1: Lista com as amostras.
+Retorna:
+    lista com as quantidades de ocorrências de cada gênero entre as amostras.
+
+'''
 def count_gender(data_list):
     male = 0
     female = 0
-    for amostra in data_list:
-        if amostra[6] == "Male":
+    for sample in data_list:
+        if sample[6] == "Male":
             male += 1
-        elif amostra[6] == "Female":
+        elif sample[6] == "Female":
             female += 1
     return [male, female]
 
@@ -119,12 +147,21 @@ input("Aperte Enter para continuar...")
 # TAREFA 6
 # TODO: Crie uma função que pegue o gênero mais popular, e retorne este gênero como uma string.
 # Esperamos ver "Male", "Female", ou "Equal" como resposta.
+'''
+
+Função que retorna o gênero mais popular entre as amostras.
+Argumentos:
+    param1: Lista com as amostras.
+Retorna:
+    String com o gênero mais popular.
+
+'''
 def most_popular_gender(data_list):
     answer = ""
     genders = count_gender(data_list)
     if genders[0] > genders[1]:
         answer = "Male"
-    elif genders[1] > genders[0]:
+    elif genders[0] < genders[1]:
         answer = "Female"
     else:
         answer = "Equal"
@@ -157,8 +194,8 @@ input("Aperte Enter para continuar...")
 print("\nTAREFA 7: Verifique o gráfico!")
 customer = 0
 subscriber = 0
-for amostra in data_list:
-    if amostra[5] == "Customer":
+for sample in data_list:
+    if sample[5] == "Customer":
         customer += 1
     else:
         subscriber += 1
@@ -200,15 +237,15 @@ median_trip = 0.
 trip_duration_sum = float(trip_duration_list[0])
 
 # Achando o mínimo, máximo e a soma das amostras
-for amostra in trip_duration_list[1:]:
-    amostra = float(amostra)
-    if amostra < min_trip:
-        min_trip = amostra
+for sample in trip_duration_list[1:]:
+    sample = float(sample)
+    if sample < min_trip:
+        min_trip = sample
 
-    if amostra > max_trip:
-        max_trip = amostra
+    if sample > max_trip:
+        max_trip = sample
     
-    trip_duration_sum += amostra
+    trip_duration_sum += sample
 
 # Calculando a média
 mean_trip = trip_duration_sum / len(trip_duration_list)
@@ -238,7 +275,7 @@ input("Aperte Enter para continuar...")
 # TAREFA 10
 # Gênero é fácil porque nós temos apenas algumas opções. E quanto a start_stations? Quantas opções ele tem?
 # TODO: Verifique quantos tipos de start_stations nós temos, usando set()
-start_stations = set()
+start_stations = set(map(lambda x : x[3], data_list))
 
 print("\nTAREFA 10: Imprimindo as start stations:")
 print(len(start_stations))
@@ -268,11 +305,24 @@ input("Aperte Enter para continuar...")
 # TODO: Crie uma função para contar tipos de usuários, sem definir os tipos
 # para que nós possamos usar essa função com outra categoria de dados.
 print("Você vai encarar o desafio? (yes ou no)")
-answer = "no"
+answer = "yes"
 
 def count_items(column_list):
     item_types = []
     count_items = []
+
+    # Individualizando as ocorrênias com set() e transformando em lista
+    item_types = list(set(column_list))
+
+    # Inicializando a lista com 0 para cada tipo de item
+    count_items = [0 for item_type in item_types]
+
+    # Deve ter um jeito pythonico de fazer isso...
+    for i, item_type in enumerate(item_types):
+        for sample in column_list:
+            if sample == item_type:
+                count_items[i] += 1
+
     return item_types, count_items
 
 
