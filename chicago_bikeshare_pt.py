@@ -28,6 +28,8 @@ input("Aperte Enter para continuar...")
 # TAREFA 1
 # TODO: Imprima as primeiras 20 linhas usando um loop para identificar os dados.
 print("\n\nTAREFA 1: Imprimindo as primeiras 20 amostras")
+for amostra in data_list[1:21]:
+    print(amostra)
 
 # Vamos mudar o data_list para remover o cabeçalho dele.
 data_list = data_list[1:]
@@ -38,9 +40,9 @@ data_list = data_list[1:]
 input("Aperte Enter para continuar...")
 # TAREFA 2
 # TODO: Imprima o `gênero` das primeiras 20 linhas
-
 print("\nTAREFA 2: Imprimindo o gênero das primeiras 20 amostras")
-
+for amostra in data_list[:20]:
+    print(amostra[6])
 
 # Ótimo! Nós podemos pegar as linhas(samples) iterando com um for, e as colunas(features) por índices.
 # Mas ainda é difícil pegar uma coluna em uma lista. Exemplo: Lista com todos os gêneros
@@ -51,6 +53,8 @@ input("Aperte Enter para continuar...")
 def column_to_list(data, index):
     column_list = []
     # Dica: Você pode usar um for para iterar sobre as amostras, pegar a feature pelo seu índice, e dar append para uma lista
+    for amostra in data:
+        column_list.append(amostra[index])
     return column_list
 
 
@@ -71,6 +75,11 @@ input("Aperte Enter para continuar...")
 male = 0
 female = 0
 
+for amostra in data_list:
+    if amostra[6] == "Male":
+        male += 1
+    elif amostra[6] == "Female":
+        female += 1
 
 # Verificando o resultado
 print("\nTAREFA 4: Imprimindo quantos masculinos e femininos nós encontramos")
@@ -88,6 +97,11 @@ input("Aperte Enter para continuar...")
 def count_gender(data_list):
     male = 0
     female = 0
+    for amostra in data_list:
+        if amostra[6] == "Male":
+            male += 1
+        elif amostra[6] == "Female":
+            female += 1
     return [male, female]
 
 
@@ -107,6 +121,13 @@ input("Aperte Enter para continuar...")
 # Esperamos ver "Male", "Female", ou "Equal" como resposta.
 def most_popular_gender(data_list):
     answer = ""
+    genders = count_gender(data_list)
+    if genders[0] > genders[1]:
+        answer = "Male"
+    elif genders[1] > genders[0]:
+        answer = "Female"
+    else:
+        answer = "Equal"
     return answer
 
 
@@ -134,7 +155,24 @@ input("Aperte Enter para continuar...")
 # TAREFA 7
 # TODO: Crie um gráfico similar para user_types. Tenha certeza que a legenda está correta.
 print("\nTAREFA 7: Verifique o gráfico!")
+customer = 0
+subscriber = 0
+for amostra in data_list:
+    if amostra[5] == "Customer":
+        customer += 1
+    else:
+        subscriber += 1
 
+print(str.format("Customers: {}, Subscribers: {}", customer, subscriber))
+types = ["Customer", "Subscriber"]
+quantity = [customer, subscriber]
+y_pos = list(range(len(types)))
+plt.bar(y_pos, quantity)
+plt.ylabel("Quantidade")
+plt.xlabel("Tipo de usuário")
+plt.xticks(y_pos, types)
+plt.title("Quantidade por tipo de usuário")
+plt.show(block=True)
 
 input("Aperte Enter para continuar...")
 # TAREFA 8
@@ -142,7 +180,7 @@ input("Aperte Enter para continuar...")
 male, female = count_gender(data_list)
 print("\nTAREFA 8: Por que a condição a seguir é Falsa?")
 print("male + female == len(data_list):", male + female == len(data_list))
-answer = "Escreva sua resposta aqui."
+answer = "Em algumas amostras o gênero não foi informado."
 print("resposta:", answer)
 
 # ------------ NÃO MUDE NENHUM CÓDIGO AQUI ------------
