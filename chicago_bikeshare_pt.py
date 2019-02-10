@@ -163,7 +163,7 @@ for amostra in data_list:
     else:
         subscriber += 1
 
-print(str.format("Customers: {}, Subscribers: {}", customer, subscriber))
+# Plotando o gráfico com a quantidade por tipo de usuário
 types = ["Customer", "Subscriber"]
 quantity = [customer, subscriber]
 y_pos = list(range(len(types)))
@@ -193,11 +193,36 @@ input("Aperte Enter para continuar...")
 # TODO: Ache a duração de viagem Mínima, Máxima, Média, e Mediana.
 # Você não deve usar funções prontas para isso, como max() e min().
 trip_duration_list = column_to_list(data_list, 2)
-min_trip = 0.
-max_trip = 0.
+min_trip = float(trip_duration_list[0])
+max_trip = float(trip_duration_list[0])
 mean_trip = 0.
 median_trip = 0.
+trip_duration_sum = float(trip_duration_list[0])
 
+# Achando o mínimo, máximo e a soma das amostras
+for amostra in trip_duration_list[1:]:
+    amostra = float(amostra)
+    if amostra < min_trip:
+        min_trip = amostra
+
+    if amostra > max_trip:
+        max_trip = amostra
+    
+    trip_duration_sum += amostra
+
+# Calculando a média
+mean_trip = trip_duration_sum / len(trip_duration_list)
+
+# Ordenando as amostras como números e calculando a mediana. 
+sorted_trip_duration_list = trip_duration_list
+sorted_trip_duration_list.sort(key = float)
+
+if len(trip_duration_list) % 2 == 0:
+    trip_duration_1 = sorted_trip_duration_list[len(trip_duration_list) // 2]
+    trip_duration_2 = sorted_trip_duration_list[(len(trip_duration_list) // 2) + 1]
+    median_trip = float((trip_duration_1 + trip_duration_2) / 2)
+else:
+    median_trip = float(sorted_trip_duration_list[len(trip_duration_list) // 2])
 
 print("\nTAREFA 9: Imprimindo o mínimo, máximo, média, e mediana")
 print("Min: ", min_trip, "Max: ", max_trip, "Média: ", mean_trip, "Mediana: ", median_trip)
