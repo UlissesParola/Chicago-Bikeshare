@@ -28,10 +28,9 @@ input("Aperte Enter para continuar...")
 # TAREFA 1
 # TODO: Imprima as primeiras 20 linhas usando um loop para identificar os dados.
 print("\n\nTAREFA 1: Imprimindo as primeiras 20 amostras")
-counter = 1
-for sample in data_list[1:21]:
-    print(str.format("Amostra {}: {}", counter, sample))
-    counter += 1
+
+for count, sample in enumerate(data_list[1:21], start=1):
+    print(str.format("Amostra {}: {}", count, sample))
 
 # Vamos mudar o data_list para remover o cabeçalho dele.
 data_list = data_list[1:]
@@ -43,15 +42,13 @@ input("Aperte Enter para continuar...")
 # TAREFA 2
 # TODO: Imprima o `gênero` das primeiras 20 linhas
 print("\nTAREFA 2: Imprimindo o gênero das primeiras 20 amostras")
-counter = 1
-for sample in data_list[:20]:
+for count,sample in enumerate(data_list[:20], start=1):
     gender = sample[6]
 
     if gender == "":
         gender = "Não informado"
     
-    print(str.format("Gênero da amostra {}: {}", counter, gender))
-    counter += 1 
+    print(str.format("Gênero da amostra {}: {}", count, gender))
 
 # Ótimo! Nós podemos pegar as linhas(samples) iterando com um for, e as colunas(features) por índices.
 # Mas ainda é difícil pegar uma coluna em uma lista. Exemplo: Lista com todos os gêneros
@@ -59,17 +56,18 @@ for sample in data_list[:20]:
 input("Aperte Enter para continuar...")
 # TAREFA 3
 # TODO: Crie uma função para adicionar as colunas(features) de uma lista em outra lista, na mesma ordem
-'''
 
-Cria uma lista com as informações de uma coluna de outra lista.
-Argumentos:
-    param1: Lista com as amostras.
-    param2: índice da coluna
-Retorna:
-    lista com as amostras da coluna escolhida.
-
-'''
 def column_to_list(data, index):
+    '''
+
+    Cria uma lista com as informações de uma coluna de outra lista.
+    Argumentos:
+        param1: Lista com as amostras.
+        param2: Índice da coluna
+    Retorna:
+        lista com as amostras da coluna escolhida.
+
+    '''
     column_list = []
     # Dica: Você pode usar um for para iterar sobre as amostras, pegar a feature pelo seu índice, e dar append para uma lista
     for sample in data:
@@ -113,16 +111,17 @@ input("Aperte Enter para continuar...")
 # TAREFA 5
 # TODO: Crie uma função para contar os gêneros. Retorne uma lista.
 # Isso deveria retornar uma lista com [count_male, count_female] (exemplo: [10, 15] significa 10 Masculinos, 15 Femininos)
-'''
 
-Cria uma lista com as quantidades de ocorrências de cada gênero entre as amostras.
-Argumentos:
-    param1: Lista com as amostras.
-Retorna:
-    lista com as quantidades de ocorrências de cada gênero entre as amostras.
-
-'''
 def count_gender(data_list):
+    '''
+
+    Cria uma lista com as quantidades de ocorrências de cada gênero entre as amostras.
+    Argumentos:
+        param1: Lista com as amostras.
+    Retorna:
+        lista com as quantidades de ocorrências de cada gênero entre as amostras.
+
+    '''
     male = 0
     female = 0
     for sample in data_list:
@@ -147,21 +146,22 @@ input("Aperte Enter para continuar...")
 # TAREFA 6
 # TODO: Crie uma função que pegue o gênero mais popular, e retorne este gênero como uma string.
 # Esperamos ver "Male", "Female", ou "Equal" como resposta.
-'''
 
-Função que retorna o gênero mais popular entre as amostras.
-Argumentos:
-    param1: Lista com as amostras.
-Retorna:
-    String com o gênero mais popular.
-
-'''
 def most_popular_gender(data_list):
+    '''
+
+    Função que retorna o gênero mais popular entre as amostras.
+    Argumentos:
+        param1: Lista com as amostras.
+    Retorna:
+        String com o gênero mais popular.
+
+    '''
     answer = ""
-    genders = count_gender(data_list)
-    if genders[0] > genders[1]:
+    male, female = count_gender(data_list)
+    if male > female:
         answer = "Male"
-    elif genders[0] < genders[1]:
+    elif male < female:
         answer = "Female"
     else:
         answer = "Equal"
@@ -194,15 +194,20 @@ input("Aperte Enter para continuar...")
 print("\nTAREFA 7: Verifique o gráfico!")
 customer = 0
 subscriber = 0
+dependent = 0
 for sample in data_list:
     if sample[5] == "Customer":
         customer += 1
-    else:
+    elif sample[5] == "Subscriber":
         subscriber += 1
+    else:
+        dependent += 1
+
+print(str.format("Customer: {}, Subscriber: {}, dependent: {}", customer, subscriber, dependent))
 
 # Plotando o gráfico com a quantidade por tipo de usuário
-types = ["Customer", "Subscriber"]
-quantity = [customer, subscriber]
+types = ["Customer", "Subscriber", "Dependent"]
+quantity = [customer, subscriber, dependent]
 y_pos = list(range(len(types)))
 plt.bar(y_pos, quantity)
 plt.ylabel("Quantidade")
@@ -317,11 +322,9 @@ def count_items(column_list):
     # Inicializando a lista com 0 para cada tipo de item
     count_items = [0 for item_type in item_types]
 
-    # Deve ter um jeito pythonico de fazer isso...
-    for i, item_type in enumerate(item_types):
-        for sample in column_list:
-            if sample == item_type:
-                count_items[i] += 1
+    for sample in column_list:
+        index = item_types.index(sample)
+        count_items[index] += 1
 
     return item_types, count_items
 
